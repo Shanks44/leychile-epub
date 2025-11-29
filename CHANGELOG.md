@@ -7,18 +7,37 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+## [1.1.0] - 2024-11-29
+
 ### Agregado
-- Interfaz de línea de comandos (CLI) para uso sin interfaz gráfica
-- Soporte para procesamiento por lotes de múltiples leyes
-- Documentación completa del proyecto
-- Archivos de comunidad (CODE_OF_CONDUCT, CONTRIBUTING, etc.)
+- **Nueva arquitectura de paquete Python** siguiendo estándares modernos (src layout)
+- Sistema de configuración centralizada con `Config` dataclass
+- Excepciones personalizadas para mejor manejo de errores
+- Type hints completos en todo el código
+- Soporte para `py.typed` (PEP 561)
+- Suite de tests con pytest (35 tests)
+- Comando `leychile-epub` instalable via pip
+- Soporte para `python -m leychile_epub`
+- Modo verbose (`-v`) en CLI
+- Funcionalidad de callback de progreso en el generador
+- Logging estructurado con niveles configurables
 
 ### Cambiado
-- Migración del proyecto desde Replit a desarrollo local
-- Actualización del README con documentación completa
+- **BREAKING**: Importaciones cambian de `from bcn_scraper import ...` a `from leychile_epub import ...`
+- Reestructuración completa del proyecto como paquete Python instalable
+- pyproject.toml modernizado con herramientas de desarrollo (ruff, mypy, black, isort)
+- README.md actualizado con nueva documentación de API
 
 ### Eliminado
-- Archivos específicos de Replit (replit.md, store.json, uv.lock)
+- Archivos obsoletos: `app.py`, `main.py`, `requirements.txt`
+- Dependencia de archivos sueltos en raíz del proyecto
+
+### Mejorado
+- Retry automático con backoff exponencial en el scraper
+- Rate limiting para evitar sobrecargar la API de BCN
+- Sistema de caché para requests repetidos
+- Mejor manejo de errores de red y parsing
+- CSS premium mejorado con soporte para dark mode
 
 ## [1.0.0] - 2024-11-29
 
@@ -51,5 +70,6 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - `Corregido` para corrección de bugs
 - `Seguridad` para vulnerabilidades
 
-[Unreleased]: https://github.com/laguileracl/leychile-epub/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/laguileracl/leychile-epub/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/laguileracl/leychile-epub/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/laguileracl/leychile-epub/releases/tag/v1.0.0
