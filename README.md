@@ -75,14 +75,14 @@ cd leychile-epub
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
-# Instalar dependencias
-pip install -r requirements.txt
+# Instalar el paquete
+pip install -e .
 
 # Generar tu primer ePub
-python cli.py https://www.leychile.cl/Navegar?idNorma=242302
+leychile-epub https://www.leychile.cl/Navegar?idNorma=242302
 ```
 
-¡Listo! Encontrarás el archivo `Codigo_del_Trabajo.epub` en tu directorio.
+¡Listo! Encontrarás el archivo ePub generado en tu directorio.
 
 ---
 
@@ -112,9 +112,16 @@ python cli.py https://www.leychile.cl/Navegar?idNorma=242302
    .venv\Scripts\activate
    ```
 
-3. **Instala las dependencias**
+3. **Instala el paquete**
    ```bash
-   pip install -r requirements.txt
+   # Instalación básica
+   pip install -e .
+   
+   # Con dependencias de desarrollo
+   pip install -e ".[dev]"
+   
+   # Con interfaz web (Streamlit)
+   pip install -e ".[web]"
    ```
 
 ### Dependencias
@@ -137,16 +144,25 @@ La forma más directa de usar el generador:
 
 ```bash
 # Generar ePub de una ley específica
-python cli.py https://www.leychile.cl/Navegar?idNorma=61438
+leychile-epub https://www.leychile.cl/Navegar?idNorma=61438
+
+# También funciona con python -m
+python -m leychile_epub https://www.leychile.cl/Navegar?idNorma=61438
 
 # Especificar directorio de salida
-python cli.py https://www.leychile.cl/Navegar?idNorma=61438 -o ./mis_leyes/
+leychile-epub https://www.leychile.cl/Navegar?idNorma=61438 -o ./mis_leyes/
 
 # Modo silencioso (sin output en consola)
-python cli.py https://www.leychile.cl/Navegar?idNorma=61438 -q
+leychile-epub https://www.leychile.cl/Navegar?idNorma=61438 -q
+
+# Modo verbose (más información)
+leychile-epub https://www.leychile.cl/Navegar?idNorma=61438 -v
 
 # Procesar múltiples URLs desde un archivo
-python cli.py --batch urls.txt -o ./output/
+leychile-epub --batch urls.txt -o ./output/
+
+# Ver versión
+leychile-epub --version
 ```
 
 #### Opciones del CLI
@@ -156,6 +172,8 @@ python cli.py --batch urls.txt -o ./output/
 | `--output` | `-o` | Directorio de salida para los ePub |
 | `--batch` | `-b` | Archivo con lista de URLs (una por línea) |
 | `--quiet` | `-q` | Modo silencioso |
+| `--verbose` | `-v` | Modo verbose |
+| `--version` | | Mostrar versión |
 | `--help` | `-h` | Mostrar ayuda |
 
 ### Interfaz Web
@@ -181,8 +199,7 @@ Esto abrirá una interfaz web en `http://localhost:8501` con:
 Integra el generador en tus propios proyectos:
 
 ```python
-from bcn_scraper import BCNLawScraper
-from epub_generator import LawEpubGenerator
+from leychile_epub import BCNLawScraper, LawEpubGenerator
 
 # Inicializar scraper
 scraper = BCNLawScraper()
@@ -201,7 +218,7 @@ if law_data:
 #### API del Scraper
 
 ```python
-from bcn_scraper import BCNLawScraper
+from leychile_epub import BCNLawScraper
 
 scraper = BCNLawScraper()
 
@@ -211,30 +228,42 @@ law_data = scraper.scrape_law(url)
 # Estructura de law_data:
 {
     "id_norma": "61438",
-    "titulo": "Ley 18700",
-    "tipo_norma": "Ley",
-    "fecha_publicacion": "1988-05-06",
-    "fecha_promulgacion": "1988-04-19",
-    "organismo": "Ministerio del Interior",
-    "articulos": [...],
-    "url_original": "https://..."
+    "url": "https://...",
+    "id_version": "2024-01-15",
+    "metadata": {
+        "title": "Ley 18700",
+        "type": "Ley",
+        "number": "18700",
+        "organism": "Ministerio del Interior",
+        "source": "Diario Oficial",
+        "subjects": ["Elecciones", "Votación"],
+        "derogation_dates": [...],
+    },
+    "content": [
+        {"type": "titulo", "text": "TITULO I..."},
+        {"type": "articulo", "title": "Artículo 1", "text": "..."},
+        ...
+    ]
 }
 ```
 
 #### API del Generador
 
 ```python
-from epub_generator import LawEpubGenerator
+from leychile_epub import LawEpubGenerator, Config
 
-generator = LawEpubGenerator()
+# Configuración personalizada
+config = Config.create_default()
+config.epub.output_dir = "./mis_epubs"
+config.epub.creator = "Mi Aplicación"
 
-# Generar ePub con opciones
+# Generar ePub
+generator = LawEpubGenerator(config)
 epub_path = generator.generate(
     law_data,
-    output_dir="./output",
-    include_toc=True,          # Tabla de contenidos
-    include_index=True,        # Índice de palabras clave
-    include_metadata=True      # Metadatos completos
+    output_dir="./output",      # Directorio de salida
+    filename="mi_ley.epub",     # Nombre del archivo
+    progress_callback=lambda p, msg: print(f"{p*100:.0f}%: {msg}")
 )
 ```
 
@@ -246,22 +275,22 @@ epub_path = generator.generate(
 
 ```bash
 # Código del Trabajo
-python cli.py https://www.leychile.cl/Navegar?idNorma=242302
+leychile-epub https://www.leychile.cl/Navegar?idNorma=242302
 
 # Código Civil
-python cli.py https://www.leychile.cl/Navegar?idNorma=172986
+leychile-epub https://www.leychile.cl/Navegar?idNorma=172986
 
 # Código Penal
-python cli.py https://www.leychile.cl/Navegar?idNorma=1984
+leychile-epub https://www.leychile.cl/Navegar?idNorma=1984
 
 # Constitución Política
-python cli.py https://www.leychile.cl/Navegar?idNorma=242302
+leychile-epub https://www.leychile.cl/Navegar?idNorma=242302
 
 # Ley de Tránsito
-python cli.py https://www.leychile.cl/Navegar?idNorma=29708
+leychile-epub https://www.leychile.cl/Navegar?idNorma=29708
 
 # Código de Aguas
-python cli.py https://www.leychile.cl/Navegar?idNorma=5605
+leychile-epub https://www.leychile.cl/Navegar?idNorma=5605
 ```
 
 ### Procesamiento por Lotes
@@ -275,14 +304,13 @@ https://www.leychile.cl/Navegar?idNorma=1984
 
 Ejecuta:
 ```bash
-python cli.py --batch leyes.txt -o ./biblioteca_legal/
+leychile-epub --batch leyes.txt -o ./biblioteca_legal/
 ```
 
 ### Uso Programático Avanzado
 
 ```python
-from bcn_scraper import BCNLawScraper
-from epub_generator import LawEpubGenerator
+from leychile_epub import BCNLawScraper, LawEpubGenerator
 from pathlib import Path
 
 def crear_biblioteca_legal(urls: list[str], output_dir: str = "./biblioteca"):
@@ -321,29 +349,31 @@ resultados = crear_biblioteca_legal(urls)
 ```
 leychile-epub/
 │
-├── 📄 bcn_scraper.py       # Scraper para la API de BCN
-│   └── BCNLawScraper       # Clase principal de scraping
+├── � src/leychile_epub/      # Paquete principal
+│   ├── __init__.py            # Exports públicos
+│   ├── __main__.py            # Entry point para python -m
+│   ├── cli.py                 # Interfaz de línea de comandos
+│   ├── config.py              # Configuración centralizada
+│   ├── exceptions.py          # Excepciones personalizadas
+│   ├── generator.py           # Generador de ePub
+│   ├── scraper.py             # Scraper para la API de BCN
+│   ├── styles.py              # Estilos CSS premium
+│   └── py.typed               # Soporte para type checking
 │
-├── 📄 epub_generator.py    # Generador de ePub
-│   └── LawEpubGenerator    # Clase principal de generación
+├── 📁 tests/                   # Tests unitarios
+│   ├── test_config.py         # Tests de configuración
+│   ├── test_scraper.py        # Tests del scraper
+│   └── test_generator.py      # Tests del generador
 │
-├── 📄 cli.py               # Interfaz de línea de comandos
-│   └── Argumentos CLI      # Parseo con argparse
+├── 📁 docs/                    # Documentación adicional
 │
-├── 📄 app.py               # Interfaz web Streamlit
-│   └── UI Components       # Componentes de interfaz
-│
-├── 📄 main.py              # Punto de entrada principal
-│
-├── 📄 requirements.txt     # Dependencias Python
-├── 📄 pyproject.toml       # Configuración del proyecto
-│
-├── 📄 README.md            # Este archivo
-├── 📄 CONTRIBUTING.md      # Guía de contribución
-├── 📄 CODE_OF_CONDUCT.md   # Código de conducta
-├── 📄 CHANGELOG.md         # Historial de cambios
-├── 📄 LICENSE              # Licencia MIT
-└── 📄 SECURITY.md          # Política de seguridad
+├── 📄 pyproject.toml          # Configuración del proyecto
+├── 📄 README.md               # Este archivo
+├── 📄 CONTRIBUTING.md         # Guía de contribución
+├── 📄 CODE_OF_CONDUCT.md      # Código de conducta
+├── 📄 CHANGELOG.md            # Historial de cambios
+├── 📄 LICENSE                 # Licencia MIT
+└── 📄 SECURITY.md             # Política de seguridad
 ```
 
 ### Flujo de Datos
@@ -437,8 +467,8 @@ This tool scrapes Chilean laws, decrees, and regulations from the official BCN (
 git clone https://github.com/laguileracl/leychile-epub.git
 cd leychile-epub
 python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python cli.py https://www.leychile.cl/Navegar?idNorma=242302
+pip install -e .
+leychile-epub https://www.leychile.cl/Navegar?idNorma=242302
 ```
 
 ### Features
