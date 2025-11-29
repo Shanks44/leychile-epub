@@ -7,6 +7,23 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+## [1.2.0] - 2024-11-29
+
+### Agregado
+- **GitHub Actions CI/CD** - Automatización completa
+  - CI pipeline: tests en Python 3.10-3.13, linting, type checking
+  - Release pipeline: publicación automática a PyPI con trusted publishing
+  - Codecov integration para cobertura de código
+- **Makefile** con comandos de desarrollo comunes
+  - `make test`, `make lint`, `make format`, `make check`, etc.
+- **Pre-commit hooks** para calidad de código automática
+  - Black, isort, ruff, mypy integrados
+- **Badges** actualizados en README (CI status, PyPI, code style)
+
+### Cambiado
+- Todo el código formateado con Black e isort
+- Configuración de linting unificada con Ruff
+
 ## [1.1.0] - 2024-11-29
 
 ### Agregado
@@ -70,6 +87,7 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - `Corregido` para corrección de bugs
 - `Seguridad` para vulnerabilidades
 
-[Unreleased]: https://github.com/laguileracl/leychile-epub/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/laguileracl/leychile-epub/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/laguileracl/leychile-epub/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/laguileracl/leychile-epub/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/laguileracl/leychile-epub/releases/tag/v1.0.0
