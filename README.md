@@ -1,0 +1,460 @@
+# 📚 LeyChile ePub Generator
+
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](CONTRIBUTING.md)
+[![Code of Conduct](https://img.shields.io/badge/code%20of%20conduct-contributor%20covenant-green.svg)](CODE_OF_CONDUCT.md)
+
+> 🇨🇱 Generador de libros electrónicos (ePub) a partir de la legislación chilena oficial de la Biblioteca del Congreso Nacional.
+
+**Convierte cualquier ley, decreto o norma chilena en un libro electrónico profesional** listo para leer en tu Kindle, Kobo, iPad o cualquier e-reader.
+
+[English](#english) | [Español](#español)
+
+---
+
+## 📖 Tabla de Contenidos
+
+- [✨ Características](#-características)
+- [🚀 Inicio Rápido](#-inicio-rápido)
+- [📦 Instalación](#-instalación)
+- [💻 Uso](#-uso)
+  - [Línea de Comandos (CLI)](#línea-de-comandos-cli)
+  - [Interfaz Web](#interfaz-web)
+  - [Como Biblioteca Python](#como-biblioteca-python)
+- [📋 Ejemplos](#-ejemplos)
+- [🏗️ Arquitectura](#️-arquitectura)
+- [🤝 Contribuir](#-contribuir)
+- [📄 Licencia](#-licencia)
+- [👤 Autor](#-autor)
+
+---
+
+## ✨ Características
+
+### 🎯 Funcionalidades Principales
+
+- **Scraping Inteligente**: Extrae datos directamente de la API XML oficial de la BCN
+- **ePub Profesional**: Genera libros electrónicos con formato premium
+- **Múltiples Interfaces**: CLI, Web (Streamlit) y API Python
+- **Procesamiento por Lotes**: Convierte múltiples normas de una vez
+
+### 📱 Características del ePub Generado
+
+| Característica | Descripción |
+|----------------|-------------|
+| 📑 **Portada Personalizada** | Incluye título, tipo de norma y fecha de publicación |
+| 📚 **Tabla de Contenidos** | Navegación interactiva por títulos, capítulos y artículos |
+| 🎨 **Estilos Profesionales** | CSS optimizado para lectura cómoda |
+| 🔗 **Referencias Cruzadas** | Links internos entre artículos relacionados |
+| 📇 **Índice de Palabras Clave** | Búsqueda rápida de términos importantes |
+| 📋 **Metadatos Completos** | Autor, fecha, identificadores estándar |
+| ✅ **Compatibilidad Universal** | Funciona en Kindle, Kobo, Apple Books, etc. |
+
+### 📜 Tipos de Normas Soportadas
+
+- ✅ Leyes
+- ✅ Decretos Ley (DL)
+- ✅ Decretos con Fuerza de Ley (DFL)
+- ✅ Decretos Supremos
+- ✅ Códigos (Civil, Penal, del Trabajo, etc.)
+- ✅ Constitución Política
+- ✅ Reglamentos
+- ✅ Y más...
+
+---
+
+## 🚀 Inicio Rápido
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/laguileracl/leychile-epub.git
+cd leychile-epub
+
+# Crear entorno virtual
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Generar tu primer ePub
+python cli.py https://www.leychile.cl/Navegar?idNorma=242302
+```
+
+¡Listo! Encontrarás el archivo `Codigo_del_Trabajo.epub` en tu directorio.
+
+---
+
+## 📦 Instalación
+
+### Requisitos
+
+- Python 3.10 o superior
+- pip (gestor de paquetes de Python)
+
+### Instalación Paso a Paso
+
+1. **Clona el repositorio**
+   ```bash
+   git clone https://github.com/laguileracl/leychile-epub.git
+   cd leychile-epub
+   ```
+
+2. **Crea un entorno virtual** (recomendado)
+   ```bash
+   python -m venv .venv
+   
+   # En macOS/Linux:
+   source .venv/bin/activate
+   
+   # En Windows:
+   .venv\Scripts\activate
+   ```
+
+3. **Instala las dependencias**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+### Dependencias
+
+| Paquete | Versión | Descripción |
+|---------|---------|-------------|
+| `requests` | ≥2.28 | Cliente HTTP para la API de BCN |
+| `beautifulsoup4` | ≥4.11 | Parser HTML/XML |
+| `lxml` | ≥4.9 | Parser XML de alto rendimiento |
+| `ebooklib` | ≥0.18 | Generación de archivos ePub |
+| `streamlit` | ≥1.28 | Interfaz web (opcional) |
+
+---
+
+## 💻 Uso
+
+### Línea de Comandos (CLI)
+
+La forma más directa de usar el generador:
+
+```bash
+# Generar ePub de una ley específica
+python cli.py https://www.leychile.cl/Navegar?idNorma=61438
+
+# Especificar directorio de salida
+python cli.py https://www.leychile.cl/Navegar?idNorma=61438 -o ./mis_leyes/
+
+# Modo silencioso (sin output en consola)
+python cli.py https://www.leychile.cl/Navegar?idNorma=61438 -q
+
+# Procesar múltiples URLs desde un archivo
+python cli.py --batch urls.txt -o ./output/
+```
+
+#### Opciones del CLI
+
+| Opción | Corta | Descripción |
+|--------|-------|-------------|
+| `--output` | `-o` | Directorio de salida para los ePub |
+| `--batch` | `-b` | Archivo con lista de URLs (una por línea) |
+| `--quiet` | `-q` | Modo silencioso |
+| `--help` | `-h` | Mostrar ayuda |
+
+### Interfaz Web
+
+Para una experiencia más visual:
+
+```bash
+python main.py --web
+# o directamente:
+streamlit run app.py
+```
+
+Esto abrirá una interfaz web en `http://localhost:8501` con:
+- Campo para ingresar URLs
+- Vista previa del contenido
+- Opciones de personalización
+- Descarga directa del ePub
+
+> **Nota**: La interfaz web requiere Streamlit, que puede no ser compatible con Python 3.14+
+
+### Como Biblioteca Python
+
+Integra el generador en tus propios proyectos:
+
+```python
+from bcn_scraper import BCNLawScraper
+from epub_generator import LawEpubGenerator
+
+# Inicializar scraper
+scraper = BCNLawScraper()
+
+# Obtener datos de una ley
+url = "https://www.leychile.cl/Navegar?idNorma=61438"
+law_data = scraper.scrape_law(url)
+
+if law_data:
+    # Generar ePub
+    generator = LawEpubGenerator()
+    epub_path = generator.generate(law_data, output_dir="./output")
+    print(f"ePub generado: {epub_path}")
+```
+
+#### API del Scraper
+
+```python
+from bcn_scraper import BCNLawScraper
+
+scraper = BCNLawScraper()
+
+# Obtener datos de una ley
+law_data = scraper.scrape_law(url)
+
+# Estructura de law_data:
+{
+    "id_norma": "61438",
+    "titulo": "Ley 18700",
+    "tipo_norma": "Ley",
+    "fecha_publicacion": "1988-05-06",
+    "fecha_promulgacion": "1988-04-19",
+    "organismo": "Ministerio del Interior",
+    "articulos": [...],
+    "url_original": "https://..."
+}
+```
+
+#### API del Generador
+
+```python
+from epub_generator import LawEpubGenerator
+
+generator = LawEpubGenerator()
+
+# Generar ePub con opciones
+epub_path = generator.generate(
+    law_data,
+    output_dir="./output",
+    include_toc=True,          # Tabla de contenidos
+    include_index=True,        # Índice de palabras clave
+    include_metadata=True      # Metadatos completos
+)
+```
+
+---
+
+## 📋 Ejemplos
+
+### Leyes Populares
+
+```bash
+# Código del Trabajo
+python cli.py https://www.leychile.cl/Navegar?idNorma=242302
+
+# Código Civil
+python cli.py https://www.leychile.cl/Navegar?idNorma=172986
+
+# Código Penal
+python cli.py https://www.leychile.cl/Navegar?idNorma=1984
+
+# Constitución Política
+python cli.py https://www.leychile.cl/Navegar?idNorma=242302
+
+# Ley de Tránsito
+python cli.py https://www.leychile.cl/Navegar?idNorma=29708
+
+# Código de Aguas
+python cli.py https://www.leychile.cl/Navegar?idNorma=5605
+```
+
+### Procesamiento por Lotes
+
+Crea un archivo `leyes.txt`:
+```
+https://www.leychile.cl/Navegar?idNorma=242302
+https://www.leychile.cl/Navegar?idNorma=172986
+https://www.leychile.cl/Navegar?idNorma=1984
+```
+
+Ejecuta:
+```bash
+python cli.py --batch leyes.txt -o ./biblioteca_legal/
+```
+
+### Uso Programático Avanzado
+
+```python
+from bcn_scraper import BCNLawScraper
+from epub_generator import LawEpubGenerator
+from pathlib import Path
+
+def crear_biblioteca_legal(urls: list[str], output_dir: str = "./biblioteca"):
+    """Crea una biblioteca de ePubs a partir de múltiples URLs."""
+    scraper = BCNLawScraper()
+    generator = LawEpubGenerator()
+    output_path = Path(output_dir)
+    output_path.mkdir(exist_ok=True)
+    
+    resultados = []
+    for url in urls:
+        try:
+            law_data = scraper.scrape_law(url)
+            if law_data:
+                epub_path = generator.generate(law_data, output_dir=str(output_path))
+                resultados.append({"url": url, "epub": epub_path, "status": "success"})
+            else:
+                resultados.append({"url": url, "status": "no_data"})
+        except Exception as e:
+            resultados.append({"url": url, "status": "error", "error": str(e)})
+    
+    return resultados
+
+# Uso
+urls = [
+    "https://www.leychile.cl/Navegar?idNorma=242302",
+    "https://www.leychile.cl/Navegar?idNorma=172986",
+]
+resultados = crear_biblioteca_legal(urls)
+```
+
+---
+
+## 🏗️ Arquitectura
+
+```
+leychile-epub/
+│
+├── 📄 bcn_scraper.py       # Scraper para la API de BCN
+│   └── BCNLawScraper       # Clase principal de scraping
+│
+├── 📄 epub_generator.py    # Generador de ePub
+│   └── LawEpubGenerator    # Clase principal de generación
+│
+├── 📄 cli.py               # Interfaz de línea de comandos
+│   └── Argumentos CLI      # Parseo con argparse
+│
+├── 📄 app.py               # Interfaz web Streamlit
+│   └── UI Components       # Componentes de interfaz
+│
+├── 📄 main.py              # Punto de entrada principal
+│
+├── 📄 requirements.txt     # Dependencias Python
+├── 📄 pyproject.toml       # Configuración del proyecto
+│
+├── 📄 README.md            # Este archivo
+├── 📄 CONTRIBUTING.md      # Guía de contribución
+├── 📄 CODE_OF_CONDUCT.md   # Código de conducta
+├── 📄 CHANGELOG.md         # Historial de cambios
+├── 📄 LICENSE              # Licencia MIT
+└── 📄 SECURITY.md          # Política de seguridad
+```
+
+### Flujo de Datos
+
+```
+┌─────────────┐     ┌──────────────┐     ┌────────────────┐     ┌──────────┐
+│  URL BCN    │────▶│  BCNScraper  │────▶│ EpubGenerator  │────▶│  .epub   │
+│  (input)    │     │  (extract)   │     │  (transform)   │     │ (output) │
+└─────────────┘     └──────────────┘     └────────────────┘     └──────────┘
+                           │                      │
+                           ▼                      ▼
+                    ┌──────────────┐     ┌────────────────┐
+                    │  XML API     │     │  CSS Styles    │
+                    │  BCN Chile   │     │  Templates     │
+                    └──────────────┘     └────────────────┘
+```
+
+---
+
+## 🤝 Contribuir
+
+¡Las contribuciones son bienvenidas! Este es un proyecto open source creado para la comunidad.
+
+### Formas de Contribuir
+
+- 🐛 **Reportar bugs**: Abre un [Issue](https://github.com/laguileracl/leychile-epub/issues)
+- 💡 **Sugerir mejoras**: Comparte tus ideas
+- 📝 **Mejorar documentación**: Ayuda a otros usuarios
+- 🔧 **Enviar código**: Haz un Pull Request
+
+Lee la [Guía de Contribución](CONTRIBUTING.md) para más detalles.
+
+### Desarrollo
+
+```bash
+# Clonar tu fork
+git clone https://github.com/TU_USUARIO/leychile-epub.git
+cd leychile-epub
+
+# Crear branch para tu feature
+git checkout -b feature/mi-mejora
+
+# Hacer cambios y commit
+git add .
+git commit -m "feat: agregar mi mejora"
+
+# Push y crear PR
+git push origin feature/mi-mejora
+```
+
+---
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
+
+---
+
+## 👤 Autor
+
+**Luis Aguilera Arteaga**
+
+- 📧 Email: luis@aguilera.cl
+- 🐙 GitHub: [@laguileracl](https://github.com/laguileracl)
+- 🇨🇱 Chile
+
+### Créditos
+
+- [Biblioteca del Congreso Nacional de Chile](https://www.bcn.cl/) por proveer acceso público a la legislación
+- Todos los [contribuidores](https://github.com/laguileracl/leychile-epub/contributors) del proyecto
+
+---
+
+## 🌟 Star History
+
+Si este proyecto te es útil, ¡considera darle una ⭐ en GitHub!
+
+---
+
+<h2 id="english">🇺🇸 English</h2>
+
+# LeyChile ePub Generator
+
+> Convert Chilean legislation from the National Congress Library into professional eBooks (ePub format).
+
+This tool scrapes Chilean laws, decrees, and regulations from the official BCN (Biblioteca del Congreso Nacional) API and generates high-quality ePub files compatible with all major e-readers.
+
+### Quick Start
+
+```bash
+git clone https://github.com/laguileracl/leychile-epub.git
+cd leychile-epub
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python cli.py https://www.leychile.cl/Navegar?idNorma=242302
+```
+
+### Features
+
+- 📚 Scrapes from official BCN XML API
+- 📱 Generates professional ePub files
+- 🎨 Premium styling and formatting
+- 📑 Interactive table of contents
+- 🔗 Cross-references between articles
+- 📇 Keyword index
+- ✅ Compatible with Kindle, Kobo, Apple Books, etc.
+
+For full documentation, see the Spanish section above.
+
+---
+
+<p align="center">
+  Made with ❤️ in Chile 🇨🇱
+</p>
